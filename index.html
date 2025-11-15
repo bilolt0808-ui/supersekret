@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анонимные сообщения в Telegram</title>
+    <style>
+        /* Стили остаются такими же, как в предыдущем примере */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #0088cc, #00a2e8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .form-container {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #0088cc;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(90deg, #0088cc, #00a2e8);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .notification {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background-color: #e7f7ef;
+            color: #0a8754;
+            border: 1px solid #a8e6c3;
+        }
+        
+        .error {
+            background-color: #fde8e8;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+        
+        .info-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #0088cc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .info-box h3 {
+            color: #0088cc;
+            margin-bottom: 8px;
+        }
+        
+        .info-box p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .setup-guide {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .setup-guide h3 {
+            color: #b08c2c;
+            margin-bottom: 8px;
+        }
+        
+        .setup-guide ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .setup-guide li {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 8px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Анонимные сообщения в Telegram</h1>
+            <p>Отправьте сообщение от неизвестного пользователя</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="setup-guide">
+                <h3>Перед использованием настройте бота:</h3>
+                <ol>
+                    <li>Найдите @BotFather в Telegram</li>
+                    <li>Создайте бота командой /newbot</li>
+                    <li>Получите токен бота</li>
+                    <li>Напишите боту любое сообщение</li>
+                    <li>Вставьте токен ниже</li>
+                </ol>
+            </div>
+            
+            <div class="info-box">
+                <h3>Как это работает?</h3>
+                <p>Заполните форму ниже, и ваше сообщение будет отправлено в Telegram через бота. Отправитель останется неизвестным.</p>
+            </div>
+            
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="botToken">Токен вашего бота:</label>
+                    <input type="text" id="botToken" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="chatId">Chat ID получателя (оставьте пустым, чтобы отправить в последний чат):</label>
+                    <input type="text" id="chatId" placeholder="Например: 123456789">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Ваше сообщение:</label>
+                    <textarea id="message" placeholder="Введите текст сообщения..." required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">Отправить анонимно</button>
+            </form>
+            
+            <div id="notification" class="notification"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('messageForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const botToken = document.getElementById('botToken').value;
+            const message = document.getElementById('message').value;
+            const chatIdInput = document.getElementById('chatId').value;
+            const notification = document.getElementById('notification');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Очищаем предыдущие уведомления
+            notification.className = 'notification';
+            notification.style.display = 'none';
+            
+            // Проверяем заполнение полей
+            if (!botToken || !message) {
+                showNotification('Пожалуйста, заполните все поля', 'error');
+                return;
+            }
+            
+            // Блокируем кнопку отправки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            
+            try {
+                // Получаем информацию о боте
+                const botInfoResponse = await fetch(`https://api.telegram.org/bot${botToken}/getMe`);
+                const botInfo = await botInfoResponse.json();
+                
+                if (!botInfo.ok) {
+                    throw new Error('Неверный токен бота');
+                }
+
+                let chatId = chatIdInput;
+
+                // Если chatId не указан, получаем последний чат из обновлений
+                if (!chatId) {
+                    const updatesResponse = await fetch(`https://api.telegram.org/bot${botToken}/getUpdates?limit=1&offset=-1`);
+                    const updates = await updatesResponse.json();
+                    
+                    if (!updates.ok || !updates.result || updates.result.length === 0) {
+                        throw new Error('Бот не получил ни одного сообщения. Напишите боту любое сообщение и попробуйте снова, либо укажите chat_id вручную.');
+                    }
+                    
+                    chatId = updates.result[0].message.chat.id;
+                }
+                
+                // Отправляем сообщение
+                const sendResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: `📨 Анонимное сообщение:\n\n${message}`,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                const sendResult = await sendResponse.json();
+                
+                if (sendResult.ok) {
+                    showNotification('✅ Сообщение успешно отправлено!', 'success');
+                    document.getElementById('message').value = '';
+                } else {
+                    throw new Error(sendResult.description || 'Ошибка отправки сообщения');
+                }
+                
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showNotification(`❌ Ошибка: ${error.message}`, 'error');
+            } finally {
+                // Разблокируем кнопку отправки
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить анонимно';
+            }
+        });
+        
+        function showNotification(text, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = text;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Автоматически скрыть уведомление через 5 секунд
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
